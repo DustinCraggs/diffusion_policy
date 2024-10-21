@@ -32,7 +32,6 @@ class RacingImageDataset(BaseImageDataset):
         val_mask = get_val_mask(
             n_episodes=self.replay_buffer.n_episodes, val_ratio=val_ratio, seed=seed
         )
-
         train_mask = ~val_mask
         train_mask = downsample_mask(
             mask=train_mask, max_n=max_train_episodes, seed=seed
@@ -45,7 +44,6 @@ class RacingImageDataset(BaseImageDataset):
             pad_after=pad_after,
             episode_mask=train_mask,
         )
-
         self.train_mask = train_mask
         self.horizon = horizon
         self.pad_before = pad_before
@@ -95,17 +93,3 @@ class RacingImageDataset(BaseImageDataset):
         torch_data = dict_apply(data, torch.from_numpy)
         return torch_data
 
-
-def test():
-    import os
-
-    zarr_path = os.path.expanduser(
-        "~/dev/diffusion_policy/data/pusht/pusht_cchi_v7_replay.zarr"
-    )
-    dataset = PushTImageDataset(zarr_path, horizon=16)
-
-    # from matplotlib import pyplot as plt
-    # normalizer = dataset.get_normalizer()
-    # nactions = normalizer['action'].normalize(dataset.replay_buffer['action'])
-    # diff = np.diff(nactions, axis=0)
-    # dists = np.linalg.norm(np.diff(nactions, axis=0), axis=-1)
